@@ -5,13 +5,19 @@ const {Server} = require('socket.io');
 const ACTIONS = require('./src/Actions');
 const path = require('path');
 
+const PORT = process.env.REACT_APP_PORT || 5000;
 
 const server = http.createServer(app);
 const io = new Server(server);
 
-app.use(express.static('build'));
-app.use((req, res, next) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+// app.use(express.static('build'));
+// app.use((req, res, next) => {
+//     res.sendFile(path.join(__dirname, 'build', 'index.html'));
+// });
+
+app.get('/',(req, res) =>{
+    res.write(`<h1> Socket IO Start on Port: ${PORT} <h1>`);
+    res.end();
 });
 
 const userSocketMap = {};
@@ -65,7 +71,6 @@ io.on('connection',(socket)=>{
     });
 });
 
-const PORT = process.env.REACT_APP_PORT || 5000;
 server.listen(PORT,()=>{
-    console.log(`listening on port ${PORT}`);
+    console.log(`Server is listening...`);
 });
